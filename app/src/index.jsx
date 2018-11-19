@@ -1,15 +1,11 @@
 // @flow
 
-import React, { Fragment } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Table from './components/Table';
 
-const Root = () => (
-  <Fragment>
-    <Table />
-  </Fragment>
-);
+const Root = () => <Table />;
 
 const App = document.getElementById('app');
 
