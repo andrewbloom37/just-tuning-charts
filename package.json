@@ -1,0 +1,44 @@
+{
+  "name": "just-tuning-charts",
+  "version": "1.0.0",
+  "description": "An application for exploring just tuning systems",
+  "main": "index.js",
+  "scripts": {
+    "build": "parcel build ./app/index.html",
+    "start": "parcel ./app/index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewbloom37/just-tuning-charts.git"
+  },
+  "keywords": [
+    "just-tuning",
+    "just-intonation",
+    "music"
+  ],
+  "author": "Andrew Bloom",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andrewbloom37/just-tuning-charts/issues"
+  },
+  "homepage": "https://github.com/andrewbloom37/just-tuning-charts#readme",
+  "dependencies": {
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^10.0.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
+    "flow-bin": "^0.86.0",
+    "flow-typed": "^2.5.1"
+  }
+}
