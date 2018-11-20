@@ -1,13 +1,12 @@
-// @flow strict
-
-type FractionGeneratorOptions = {
+interface FractionGeneratorOptions {
   twoPow: number,
   threePow: number,
   fivePow: number,
+  sevenPow: number,
 }
 
 export const fractionGenerator = ({
-  twoPow, threePow, fivePow,
+  twoPow, threePow, fivePow, sevenPow,
 }: FractionGeneratorOptions) => {
   let numerator = 1;
   let denominator = 1;
@@ -41,25 +40,37 @@ export const fractionGenerator = ({
       denominator *= 5;
     }
   }
+  if (sevenPow > 0) {
+    for (let i = 0; i < sevenPow; i += 1) {
+      numerator *= 7;
+    }
+  } else if (sevenPow < 0) {
+    const sevenPowInv = -sevenPow;
+    for (let i = 0; i < sevenPowInv; i += 1) {
+      denominator *= 7;
+    }
+  }
   return { numerator, denominator };
 };
 
 export const generateSeries = (): Array<FractionGeneratorOptions> => {
   const arr = [];
-  for (let twoPow = -5; twoPow <= 5; twoPow += 1) {
-    for (let threePow = -5; threePow <= 5; threePow += 1) {
-      for (let fivePow = -5; fivePow <= 5; fivePow += 1) {
-        arr.push({ twoPow, threePow, fivePow });
+  for (let twoPow = -4; twoPow <= 4; twoPow += 1) {
+    for (let threePow = -2; threePow <= 2; threePow += 1) {
+      for (let fivePow = -1; fivePow <= 1; fivePow += 1) {
+        for (let sevenPow = -1; sevenPow <= 1; sevenPow += 1) {
+          arr.push({ twoPow, threePow, fivePow, sevenPow });
+        }
       }
     }
   }
   return arr;
 };
 
-type NumberCalculatorOptions = FractionGeneratorOptions & {
+interface Input {
   inputValue: number,
 };
 
 export const numberCalculator = ({
-  inputValue, twoPow, threePow, fivePow,
-}: NumberCalculatorOptions) => inputValue * (2 ** twoPow) * (3 ** threePow) * (5 ** fivePow);
+  inputValue, twoPow, threePow, fivePow, sevenPow,
+}: Input & FractionGeneratorOptions) => inputValue * (2 ** twoPow) * (3 ** threePow) * (5 ** fivePow) * (7 ** sevenPow);
