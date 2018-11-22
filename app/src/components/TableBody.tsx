@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import v4 from 'uuid/v4';
 import styled from 'styled-components';
 
-import { generateSeries, fractionGenerator, numberCalculator } from '../lib/helpers';
+import { intervalMap, numberCalculator } from '../lib/helpers';
 
 const TableGrid = styled.td`
   outline: solid 1px black;
@@ -10,37 +10,35 @@ const TableGrid = styled.td`
   padding: 1px 25px;
 `;
 
-const powerSeries = generateSeries().filter((powerEl) => {
-  const { numerator, denominator } = fractionGenerator(powerEl);
-  const decimal = numberCalculator({ inputValue: 1, ...powerEl });
-  return decimal >= 1 && decimal <= 2 && numerator <= 12 && denominator <= 12;
-}).sort((a, b) => {
-  const aNum = numberCalculator({ inputValue: 1, ...a });
-  const bNum = numberCalculator({ inputValue: 1, ...b });
-  return aNum - bNum;
-});
-
 interface Props {
   inputValue: number;
+  updateValue: (value: number) => void;
 }
 
 export default (props: Props) => {
-  const { inputValue } = props;
+  const { inputValue, updateValue } = props;
   return (
-    <tbody>
-      <tr>
-        <TableGrid>Ratio</TableGrid>
-        <TableGrid>Frequency</TableGrid>
-      </tr>
-      {powerSeries.map((powerEl) => {
-        const { numerator, denominator } = fractionGenerator(powerEl);
-        return (
-          <tr key={v4()}>
-            <TableGrid>{`${numerator}/${denominator}`}</TableGrid>
-            <TableGrid>{`${numberCalculator({ inputValue, ...powerEl })}`}</TableGrid>
-          </tr>
-        );
-      })}
-    </tbody>
+    <Fragment>
+      <thead>
+        <tr>
+          <TableGrid>Interval</TableGrid>
+          <TableGrid>Ratio</TableGrid>
+          <TableGrid>Frequency</TableGrid>
+        </tr>
+      </thead>
+      <tbody>
+        {Object.keys(intervalMap).map((interval) => {
+          const { numerator, denominator } = intervalMap[interval];
+          const freqValue = numberCalculator({ inputValue, numerator, denominator });
+          return (
+            <tr key={v4()}>
+              <TableGrid>{interval}</TableGrid>
+              <TableGrid>{`${numerator}/${denominator}`}</TableGrid>
+              <TableGrid onClick={() => updateValue(freqValue)}>{`${freqValue}`}</TableGrid>
+            </tr>
+          );
+        })}
+      </tbody>
+    </Fragment>
   );
 };

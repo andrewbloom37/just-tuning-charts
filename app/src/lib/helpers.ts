@@ -1,76 +1,87 @@
-interface FractionGeneratorOptions {
-  twoPow: number,
-  threePow: number,
-  fivePow: number,
-  sevenPow: number,
-}
-
-export const fractionGenerator = ({
-  twoPow, threePow, fivePow, sevenPow,
-}: FractionGeneratorOptions) => {
-  let numerator = 1;
-  let denominator = 1;
-  if (twoPow > 0) {
-    for (let i = 0; i < twoPow; i += 1) {
-      numerator *= 2;
-    }
-  } else if (twoPow < 0) {
-    const twoPowInv = -twoPow;
-    for (let i = 0; i < twoPowInv; i += 1) {
-      denominator *= 2;
-    }
-  }
-  if (threePow > 0) {
-    for (let i = 0; i < threePow; i += 1) {
-      numerator *= 3;
-    }
-  } else if (threePow < 0) {
-    const threePowInv = -threePow;
-    for (let i = 0; i < threePowInv; i += 1) {
-      denominator *= 3;
-    }
-  }
-  if (fivePow > 0) {
-    for (let i = 0; i < fivePow; i += 1) {
-      numerator *= 5;
-    }
-  } else if (fivePow < 0) {
-    const fivePowInv = -fivePow;
-    for (let i = 0; i < fivePowInv; i += 1) {
-      denominator *= 5;
-    }
-  }
-  if (sevenPow > 0) {
-    for (let i = 0; i < sevenPow; i += 1) {
-      numerator *= 7;
-    }
-  } else if (sevenPow < 0) {
-    const sevenPowInv = -sevenPow;
-    for (let i = 0; i < sevenPowInv; i += 1) {
-      denominator *= 7;
-    }
-  }
-  return { numerator, denominator };
+interface Map<T> {
+  [key: string]: T;
 };
 
-export const generateSeries = (): Array<FractionGeneratorOptions> => {
-  const arr = [];
-  for (let twoPow = -4; twoPow <= 4; twoPow += 1) {
-    for (let threePow = -2; threePow <= 2; threePow += 1) {
-      for (let fivePow = -1; fivePow <= 1; fivePow += 1) {
-        for (let sevenPow = -1; sevenPow <= 1; sevenPow += 1) {
-          arr.push({ twoPow, threePow, fivePow, sevenPow });
-        }
-      }
-    }
-  }
-  return arr;
+interface Interval {
+  numerator: number;
+  denominator: number;
+};
+
+export const intervalMap: Map<Interval> = {
+  U: {
+    numerator: 1,
+    denominator: 1,
+  },
+  m2: {
+    numerator: 14,
+    denominator: 13,
+  },
+  M2: {
+    numerator: 8,
+    denominator: 7,
+  },
+  m3: {
+    numerator: 6,
+    denominator: 5,
+  },
+  M3: {
+    numerator: 5,
+    denominator: 4,
+  },
+  P4: {
+    numerator: 4,
+    denominator: 3,
+  },
+  A4: {
+    numerator: 7,
+    denominator: 5,
+  },
+  d5: {
+    numerator: 10,
+    denominator: 7,
+  },
+  P5: {
+    numerator: 3,
+    denominator: 2,
+  },
+  m6: {
+    numerator: 8,
+    denominator: 5,
+  },
+  M6: {
+    numerator: 5,
+    denominator: 3,
+  },
+  m7: {
+    numerator: 7,
+    denominator: 4,
+  },
+  M7: {
+    numerator: 13,
+    denominator: 7,
+  },
 };
 
 interface Input {
   inputValue: number,
 };
 
+const isNegative = (num: number): boolean => num < 0 ? true : false;
+
+export const shiftOctave = (twoPow: number, { numerator, denominator }: Interval): Interval => {
+  if (isNegative(twoPow)) {
+    const posTwoPow = -twoPow;
+    return ({
+      numerator,
+      denominator: denominator * (2 ** posTwoPow),
+    })
+  }
+  return ({
+    numerator: numerator * (2 ** twoPow),
+    denominator,
+  })
+}
+
 export const numberCalculator = ({
-  inputValue, twoPow, threePow, fivePow, sevenPow,
-}: Input & FractionGeneratorOptions) => inputValue * (2 ** twoPow) * (3 ** threePow) * (5 ** fivePow) * (7 ** sevenPow);
+  inputValue, numerator, denominator,
+}: Input & Interval) => inputValue * numerator / denominator;

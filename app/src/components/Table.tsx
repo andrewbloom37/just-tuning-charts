@@ -31,6 +31,11 @@ export default class Table extends React.Component<{}, State> {
     this.setState({ inputValue: Number(event.target && event.target.value) });
   }
 
+  updateValue = (value: number) => {
+    console.log(event);
+    this.setState({ inputValue: value });
+  }
+
   render() {
     const { inputValue } = this.state;
     return (
@@ -52,6 +57,7 @@ export default class Table extends React.Component<{}, State> {
         <CenteredTable>
           <TableBody
             inputValue={inputValue}
+            updateValue={this.updateValue}
           />
         </CenteredTable>
       </Fragment>
