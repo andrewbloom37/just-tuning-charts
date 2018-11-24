@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import v4 from 'uuid/v4';
 import styled from 'styled-components';
 
-import { intervalMap, numberCalculator } from '../lib/helpers';
+import { numberCalculator, slicedArr } from '../lib/intervalMap';
 
 const TableGrid = styled.td`
   outline: solid 1px black;
@@ -12,29 +12,33 @@ const TableGrid = styled.td`
 
 interface Props {
   inputValue: number;
-  updateValue: (value: number) => void;
+  selectedNote: number;
+  updateValue: (value: number, index: number) => void;
 }
 
 export default (props: Props) => {
-  const { inputValue, updateValue } = props;
+  const { inputValue, selectedNote, updateValue } = props;
+  const arr = slicedArr(selectedNote);
   return (
     <Fragment>
       <thead>
         <tr>
-          <TableGrid>Interval</TableGrid>
           <TableGrid>Ratio</TableGrid>
+          <TableGrid>Midi Note</TableGrid>
           <TableGrid>Frequency</TableGrid>
         </tr>
       </thead>
       <tbody>
-        {Object.keys(intervalMap).map((interval) => {
-          const { numerator, denominator } = intervalMap[interval];
+        {arr.map((_, index) => {
+          const ratio = arr[index].split('/');
+          const numerator = parseInt(ratio[0], 10);
+          const denominator = parseInt(ratio[1], 10);
           const freqValue = numberCalculator({ inputValue, numerator, denominator });
           return (
-            <tr key={v4()}>
-              <TableGrid>{interval}</TableGrid>
+            <tr key={v4()} onClick={() => updateValue(freqValue, index)}>
               <TableGrid>{`${numerator}/${denominator}`}</TableGrid>
-              <TableGrid onClick={() => updateValue(freqValue)}>{`${freqValue}`}</TableGrid>
+              <TableGrid>{60 + index}</TableGrid>
+              <TableGrid>{`${freqValue}`}</TableGrid>
             </tr>
           );
         })}

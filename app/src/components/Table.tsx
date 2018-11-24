@@ -11,52 +11,32 @@ const CenteredTable = styled.table`
   margin: 0 auto;
 `;
 
-const CenteredBox = styled.div`
-  display: flex;
-  justify-content: center;
-  margin: 20px;
-`;
-
 interface State {
   inputValue: number;
+  selectedNote: number;
 }
 
 export default class Table extends React.Component<{}, State> {
   state = {
-    inputValue: 432,
+    inputValue: 259.2,
+    selectedNote: 60,
   };
 
-  handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    if (!(event.target instanceof HTMLInputElement)) return;
-    this.setState({ inputValue: Number(event.target && event.target.value) });
-  }
-
-  updateValue = (value: number) => {
-    console.log(event);
-    this.setState({ inputValue: value });
+  updateValue = (value: number, index: number) => {
+    this.setState({ selectedNote: 60 + index, inputValue: value });
   }
 
   render() {
-    const { inputValue } = this.state;
+    const { inputValue, selectedNote } = this.state;
     return (
       <Fragment>
         <Head>
-          {`Just Intonation Ratios and Frequency for ${inputValue} Hz`}
+          Just Intonation Ratios and Frequency
         </Head>
-        <CenteredBox>
-          <label htmlFor="hertz">
-            Input frequency in Hz:
-            <input
-              id="hertz"
-              type="number"
-              onChange={this.handleChange}
-              value={parseFloat(`${inputValue}`)}
-            />
-          </label>
-        </CenteredBox>
         <CenteredTable>
           <TableBody
             inputValue={inputValue}
+            selectedNote={selectedNote}
             updateValue={this.updateValue}
           />
         </CenteredTable>

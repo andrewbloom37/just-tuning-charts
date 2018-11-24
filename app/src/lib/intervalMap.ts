@@ -1,8 +1,8 @@
-interface Map<T> {
+export interface Map<T> {
   [key: string]: T;
 };
 
-interface Interval {
+export interface Interval {
   numerator: number;
   denominator: number;
 };
@@ -36,10 +36,11 @@ export const intervalMap: Map<Interval> = {
     numerator: 7,
     denominator: 5,
   },
-  d5: {
-    numerator: 10,
-    denominator: 7,
-  },
+  // Prefer Augmented 4th over Diminished 5th?
+  // d5: {
+  //   numerator: 5,
+  //   denominator: 7,
+  // },
   P5: {
     numerator: 3,
     denominator: 2,
@@ -62,25 +63,50 @@ export const intervalMap: Map<Interval> = {
   },
 };
 
+export const ratioArr = [
+  '7/13',
+  '4/7',
+  '3/5',
+  '5/8',
+  '2/3',
+  '7/10',
+  '3/4',
+  '4/5',
+  '5/6',
+  '7/8',
+  '13/14',
+  '1/1',
+  '14/13',
+  '8/7',
+  '6/5',
+  '5/4',
+  '4/3',
+  '7/5',
+  '3/2',
+  '8/5',
+  '5/3',
+  '7/4',
+  '13/7',
+];
+
+export const slicedArr = (noteValue: number) => {
+  const start = 71 - noteValue;
+  const end = start + 12;
+  return ratioArr.slice(start, end);
+}
+
+// Arr of calculated interval fractions e.g. [1/1, 14/13, 8/7, ... 13/7]
+const intervalArr = Object.keys(intervalMap)
+  .map(interval => intervalMap[interval].numerator / intervalMap[interval].denominator);
+
+// 432 A4 = midi note 69
+// 256 C4 = midi note 60 (middle C)
+
+const midiNotes: Array<number> = [...(new Array(128))].map(() => 0);
+
 interface Input {
   inputValue: number,
 };
-
-const isNegative = (num: number): boolean => num < 0 ? true : false;
-
-export const shiftOctave = (twoPow: number, { numerator, denominator }: Interval): Interval => {
-  if (isNegative(twoPow)) {
-    const posTwoPow = -twoPow;
-    return ({
-      numerator,
-      denominator: denominator * (2 ** posTwoPow),
-    })
-  }
-  return ({
-    numerator: numerator * (2 ** twoPow),
-    denominator,
-  })
-}
 
 export const numberCalculator = ({
   inputValue, numerator, denominator,
